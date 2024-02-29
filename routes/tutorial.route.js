@@ -3,7 +3,13 @@ const tutorials = require("../controllers/tutorial.controller.js");
 var router = express.Router();
 
 // Create a new Tutorial
-router.post("/create", tutorials.create);
+router.post("/create", async (req, res) => {
+  try {
+    await tutorials.create(req, res);
+  } catch (error) {
+    res.status(500).send("An error occurred");
+  }
+});
 
 // Retrieve all Tutorials
 router.get("/findAll", tutorials.findAll);

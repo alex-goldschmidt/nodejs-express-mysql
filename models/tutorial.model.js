@@ -7,17 +7,16 @@ class Tutorial {
     this.published = tutorial.published;
   }
 
-  static create(newTutorial, result) {
-    db.query("INSERT INTO tutorials SET ?", newTutorial, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      console.log("created tutorial: ", { id: res.insertId, ...newTutorial });
-      result(null, { id: res.insertId, ...newTutorial });
-    });
+  static async create(newTutorial) {
+    try {
+      const [result] = await db.query("INSERT INTO tutorials SET ?", [
+        newTutorial,
+      ]);
+      return { id: result.insertId, ...newTutorial };
+    } catch (error) {
+      console.error("Error creating tutorial:", error);
+      throw error;
+    }
   }
 
   static queryByTutorialId(tutorialId, result) {
