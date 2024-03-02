@@ -15,12 +15,19 @@ exports.create = async (req, res) => {
 
   try {
     const data = await Tutorial.create(tutorial);
-    res.send(data);
+    return res.send(data);
   } catch (err) {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while creating the Tutorial.",
-    });
+    next(err);
+  }
+};
+
+exports.findByTutorialId = async (req, res) => {
+  let tutorialId = req.params.id;
+  try {
+    const data = await Tutorial.queryByTutorialId(tutorialId);
+    return res.send(data);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -33,23 +40,6 @@ exports.findAll = (req, res) => {
           err.message || "Some error occurred while retrieving tutorials.",
       });
     else res.send(data);
-  });
-};
-
-// Find a single Tutorial with a id
-exports.findByTutorialId = (req, res) => {
-  Tutorial.queryByTutorialId(req.params.id, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found Tutorial with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: "Error retrieving Tutorial with id " + req.params.id,
-        });
-      }
-    } else res.send(data);
   });
 };
 

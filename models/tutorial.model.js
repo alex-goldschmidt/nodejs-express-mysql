@@ -8,38 +8,18 @@ class Tutorial {
   }
 
   static async create(newTutorial) {
-    try {
-      const [result] = await db.query("INSERT INTO tutorials SET ?", [
-        newTutorial,
-      ]);
-      return { id: result.insertId, ...newTutorial };
-    } catch (error) {
-      console.error("Error creating tutorial:", error);
-      throw error;
-    }
+    const [result] = await db.query("INSERT INTO tutorials SET ?", [
+      newTutorial,
+    ]);
+    return { id: result.insertId, ...newTutorial };
   }
 
-  static queryByTutorialId(tutorialId, result) {
-    db.query(
+  static async queryByTutorialId(tutorialId) {
+    const [result] = await db.query(
       "SELECT * FROM tutorials WHERE tutorialId = ?",
-      [tutorialId],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-
-        if (res.length) {
-          console.log("found tutorial: ", res[0]);
-          result(null, res[0]);
-          return;
-        }
-
-        // not found Tutorial with the id
-        result({ kind: "not_found" }, null);
-      }
+      [tutorialId]
     );
+    return result[0];
   }
 
   static queryAll = (result) => {

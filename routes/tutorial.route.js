@@ -2,12 +2,19 @@ var express = require("express");
 const tutorials = require("../controllers/tutorial.controller.js");
 var router = express.Router();
 
-// Create a new Tutorial
-router.post("/create", async (req, res) => {
+router.post("/create", async (req, res, next) => {
   try {
     await tutorials.create(req, res);
   } catch (error) {
-    res.status(500).send("An error occurred");
+    next(error);
+  }
+});
+
+router.get("/findByTutorialId/:id", async (req, res, next) => {
+  try {
+    await tutorials.findByTutorialId(req, res);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -16,9 +23,6 @@ router.get("/findAll", tutorials.findAll);
 
 // Retrieve all published Tutorials
 router.get("/published", tutorials.findAllPublished);
-
-// Retrieve a single Tutorial with id
-router.get("/:id", tutorials.findByTutorialId);
 
 router.get("/title/:title", tutorials.findByTitle);
 
