@@ -18,21 +18,46 @@ router.get("/findByTutorialId/:id", async (req, res, next) => {
   }
 });
 
-// Retrieve all Tutorials
-router.get("/findAll", tutorials.findAll);
+router.get("/findAll", async (req, res, next) => {
+  try {
+    await tutorials.findAll(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/title/:title", async (req, res, next) => {
+  try {
+    await tutorials.findByTitle(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Retrieve all published Tutorials
-router.get("/published", tutorials.findAllPublished);
-
-router.get("/title/:title", tutorials.findByTitle);
+router.get("/published", async (req, res, next) => {
+  try {
+    await tutorials.findAllPublished(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Update a Tutorial with id
-router.put("/:id", tutorials.update);
+router.put("/update/:id", async (req, res, next) => {
+  try {
+    await tutorials.update(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// Delete a Tutorial with id
-router.delete("/:id", tutorials.delete);
-
-// Delete all Tutorials
-router.delete("/deleteAll", tutorials.deleteAll);
+router.delete("/delete/:id", async (req, res, next) => {
+  try {
+    await tutorials.delete(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
