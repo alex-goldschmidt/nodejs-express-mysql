@@ -1,28 +1,20 @@
 var express = require("express");
 const tutorials = require("../controllers/tutorial.controller.js");
+const { asyncHandler } = require("../utils.js");
 var router = express.Router();
 
-// Create a new Tutorial
-router.post("/create", tutorials.create);
+router.post("/create", asyncHandler(tutorials.create));
 
-// Retrieve all Tutorials
-router.get("/findAll", tutorials.findAll);
+router.get("/findByTutorialId/:id", asyncHandler(tutorials.findByTutorialId));
 
-// Retrieve all published Tutorials
-router.get("/published", tutorials.findAllPublished);
+router.get("/findAll", asyncHandler(tutorials.findAll));
 
-// Retrieve a single Tutorial with id
-router.get("/:id", tutorials.findByTutorialId);
+router.get("/title/:title", asyncHandler(tutorials.findByTitle));
 
-router.get("/title/:title", tutorials.findByTitle);
+router.get("/published", asyncHandler(tutorials.findAllPublished));
 
-// Update a Tutorial with id
-router.put("/:id", tutorials.update);
+router.put("/update/:id", asyncHandler(tutorials.update));
 
-// Delete a Tutorial with id
-router.delete("/:id", tutorials.delete);
-
-// Delete all Tutorials
-router.delete("/deleteAll", tutorials.deleteAll);
+router.delete("/delete/:id", asyncHandler(tutorials.delete));
 
 module.exports = router;
